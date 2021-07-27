@@ -1,6 +1,6 @@
-import query from "../libs/query";
-
+import React from "react";
 import useSWR from "swr";
+import query from "../libs/query";
 
 const gqlQuery = {
   query: "query { users(limit:10, order_by:{created_at: desc}) { id name } }",
