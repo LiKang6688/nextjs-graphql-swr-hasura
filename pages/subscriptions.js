@@ -1,7 +1,7 @@
-import Link from 'next/link'
-import subscribe from '../libs/subscribe'
+import Link from "next/link";
+import subscribe from "../libs/subscribe";
 
-import useSWR from 'swr'
+import useSWR from "swr";
 
 const USER_SUBSCRIPTION = `
   subscription {
@@ -13,28 +13,30 @@ const USER_SUBSCRIPTION = `
   }
 `;
 
-const subscribeData = async(...args) => {
-  return subscribe(USER_SUBSCRIPTION);
-};
+const subscriber = async (...args) => subscribe(USER_SUBSCRIPTION);
 
-export default function Subscription() {
-  const { data } = useSWR('subscription', subscribeData);
-  if(!data) {
-    return <div>Loading...</div>
-  }
+export default function Subscription(props) {
+  const { data, error } = useSWR(
+    "subscription",
+    subscriber
+    // , {
+    //   initialData: props,
+    // }
+  );
 
-  return ( 
-    <div style={{ textAlign: 'center' }}>
+  if (error) return <div>Error...</div>;
+  if (!data) return <div>Loading...</div>;
+
+  return (
+    <div style={{ textAlign: "center" }}>
       <h1>Subscribed to Latest 10 users from the database</h1>
       <div>
-      {
-        data.users.map(user => 
+        {data.users.map((user) => (
           <div key={user.id}>
             <p>{user.name}</p>
           </div>
-        )
-      }
+        ))}
       </div>
     </div>
-  )
+  );
 }

@@ -1,36 +1,43 @@
-import fetch from '../libs/fetch';
+import query from "../libs/query";
 
-import useSWR from 'swr'
+import useSWR from "swr";
 
-const query = {
-  'query': 'query { users(limit:10, order_by:{created_at: desc}) { id name } }'
+const gqlQuery = {
+  query: "query { users(limit:10, order_by:{created_at: desc}) { id name } }",
 };
 
-const getData = async(...args) => {
-  return await fetch(query);
-};
+const fetcher = async (...args) => await query(gqlQuery);
 
-export default function Main() {
-  const { data, error } = useSWR(query, getData);
-  if(error) {
-    return <div>Error...</div>
-  }
-  if(!data) {
-    return <div>Loading...</div>
-  }
+export default function Main(props) {
+  // The useSWR hook gets a graphql query as the key and the fetcher function
+  const { data, error } = useSWR(gqlQuery, fetcher, {
+    initialData: props,
+  });
 
-  return ( 
-    <div style={{ textAlign: 'center' }}>
+  if (error) return <div>Error...</div>;
+  if (!data) return <div>Loading...</div>;
+
+  return (
+    <div style={{ textAlign: "center" }}>
       <h1>Users from database</h1>
       <div>
-      {
-        data.users.map(user => 
+        {data.users.map((user) => (
           <div key={user.id}>
             <p>{user.name}</p>
           </div>
-        )
-      }
+        ))}
       </div>
     </div>
-  )
+  );
+}
+
+export async function getStaticProps() {
+  const fetch = await query(gqlQuery);
+  const users = fetch.users;
+
+  return {
+    props: {
+      users,
+    },
+  };
 }

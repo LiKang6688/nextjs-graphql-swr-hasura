@@ -1,20 +1,19 @@
 import { mutate } from "swr";
 
-let latestData = null;
-
 // setup ws and broadcast to all SWRs
 const GRAPHQL_ENDPOINT_WSS = "wss://" + process.env.NEXT_PUBLIC_HASURA_URL;
-console.log({ GRAPHQL_ENDPOINT_WSS });
 const HASURA_ADMIN_SECRET = process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET;
-console.log({ HASURA_ADMIN_SECRET });
-
 const headers = {
   "Content-Type": "application/json",
   "x-hasura-admin-secret": HASURA_ADMIN_SECRET,
 };
+let latestData = null;
 
 const subscribe = async (...args) => {
   if (typeof window !== "undefined") {
+    // Using the native WebSocket instance,
+    // we are creating an initial message that
+    // will be sent to the GraphQL server (containing the payload like headers)
     const ws = new WebSocket(GRAPHQL_ENDPOINT_WSS, "graphql-ws");
     const init_msg = {
       type: "connection_init",

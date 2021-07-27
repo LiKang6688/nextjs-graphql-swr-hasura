@@ -1,25 +1,30 @@
 import React from "react";
 import useSWR, { mutate, trigger } from "swr";
-import fetch from "../libs/fetch";
+import query from "../libs/query";
 
 import { v4 as uuidv4 } from "uuid";
 
-const query = {
+const gqlQuery = {
   query: "query { users(limit: 10, order_by: {created_at: desc}) { id name } }",
 };
 
-const getData = async (...args) => {
-  return await fetch(query);
-};
+const fetcher = async (...args) => await query(gqlQuery);
 
-export default function OptimisticUI() {
+export default function OptimisticUI(props) {
   const [text, setText] = React.useState("");
-  const { data } = useSWR(query, getData);
+  const { data, error } = useSWR(gqlQuery, fetcher, {
+    initialData: props,
+  });
+
+  if (error) return <div>Error...</div>;
+  if (!data) return <div>Loading...</div>;
 
   async function handleSubmit(event) {
     event.preventDefault();
-    // mutate current data to optimistically update the UI
     const id = uuidv4();
+    // mutate current data to optimistically update the UI
+    // in the mutate method,a key can be passed (GraphQL query will be the key for us)
+    // and the new data to be used along with a boolean to specify whether you want to revalidate or not.
     mutate(query, { users: [...data.users, { id, name: text }] }, false);
     // send text to the API
     const mutation = {
@@ -51,4 +56,15 @@ export default function OptimisticUI() {
       </ul>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const fetch = await query(gqlQuery);
+  const users = fetch.users;
+
+  return {
+    props: {
+      users,
+    },
+  };
 }
