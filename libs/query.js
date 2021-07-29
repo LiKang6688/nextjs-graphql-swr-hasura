@@ -2,14 +2,16 @@ const GRAPHQL_ENDPOINT = "https://" + process.env.NEXT_PUBLIC_HASURA_URL;
 const HASURA_ADMIN_SECRET = process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET;
 const headers = {
   "Content-Type": "application/json",
+  Accept: "application/json",
   "x-hasura-admin-secret": HASURA_ADMIN_SECRET,
 };
+const limit = 5;
 
 const query = async (...args) => {
   const options = {
     headers: headers,
     method: "POST",
-    body: JSON.stringify(args[0]),
+    body: JSON.stringify({ query: args[0], variables: { limit } }),
   };
   const res = await fetch(GRAPHQL_ENDPOINT, options);
   const res_json = await res.json();

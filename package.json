@@ -6,6 +6,8 @@
   "author": "Praveen <praveen@hasura.io>",
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
+    "graphql": "^15.5.1",
+    "graphql-request": "^3.5.0",
     "next": "10.0.3",
     "npm-check-unused": "^6.0.0",
     "react": "17.0.1",

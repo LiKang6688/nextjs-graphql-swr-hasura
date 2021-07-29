@@ -16,13 +16,7 @@ const USER_SUBSCRIPTION = `
 const subscriber = async (...args) => subscribe(USER_SUBSCRIPTION);
 
 export default function Subscription(props) {
-  const { data, error } = useSWR(
-    "subscription",
-    subscriber
-    // , {
-    //   initialData: props,
-    // }
-  );
+  const { data, error } = useSWR("subscription", subscriber);
 
   if (error) return <div>Error...</div>;
   if (!data) return <div>Loading...</div>;
