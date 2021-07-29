@@ -1,21 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import useSWR, { mutate, trigger } from "swr";
-import query from "../libs/query";
-
 import { v4 as uuidv4 } from "uuid";
+import fetch from "../libs/fetch";
 
-const usersQuery = `query users($limit: Int!) { 
+const usersQuery = {
+  query: `query users($limit: Int!) { 
     users(limit: $limit, order_by: {created_at: desc}) 
     { 
       id 
       name 
     } 
-  }`;
+  }`,
+  variables: { limit: 10 },
+};
 
-const fetcher = async () => await query(usersQuery);
+const fetcher = async () => await fetch(usersQuery);
 
 export default function OptimisticUI(props) {
-  const [text, setText] = React.useState("");
+  const [text, setText] = useState("");
   const { data, error } = useSWR(usersQuery, fetcher, {
     initialData: props,
   });
@@ -29,11 +31,13 @@ export default function OptimisticUI(props) {
     // mutate current data to optimistically update the UI
     // in the mutate method,a key can be passed (GraphQL query will be the key for us)
     // and the new data to be used along with a boolean to specify whether you want to revalidate or not.
-    mutate(query, { users: [...data.users, { id, name: text }] }, false);
+    mutate(usersQuery, { users: [...data.users, { id, name: text }] }, false);
     // send text to the API
     const mutation = {
-      query:
-        "mutation users($id: String!, $name: String!) { insert_users(objects: [{id: $id, name: $name}]) { affected_rows } }",
+      query: `mutation users($id: String!, $name: String!) 
+        { insert_users(objects: [{id: $id, name: $name}]) 
+          { affected_rows } 
+        }`,
       variables: { id: id, name: text },
     };
     await fetch(mutation);
@@ -63,8 +67,8 @@ export default function OptimisticUI(props) {
 }
 
 export async function getStaticProps() {
-  const fetch = await query(usersQuery);
-  const users = fetch.users;
+  const query = await fetch(usersQuery);
+  const users = query.users;
 
   return {
     props: {

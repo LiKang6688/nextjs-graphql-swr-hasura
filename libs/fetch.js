@@ -5,13 +5,12 @@ const headers = {
   Accept: "application/json",
   "x-hasura-admin-secret": HASURA_ADMIN_SECRET,
 };
-const limit = 5;
 
-const query = async (...args) => {
+const _fetch = async (...args) => {
   const options = {
     headers: headers,
     method: "POST",
-    body: JSON.stringify({ query: args[0], variables: { limit } }),
+    body: JSON.stringify(args[0]),
   };
   const res = await fetch(GRAPHQL_ENDPOINT, options);
   const res_json = await res.json();
@@ -21,4 +20,4 @@ const query = async (...args) => {
   return res_json.data;
 };
 
-export default query;
+export default _fetch;

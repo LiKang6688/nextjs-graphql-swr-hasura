@@ -1,16 +1,19 @@
 import React from "react";
 import useSWR from "swr";
-import query from "../libs/query";
+import fetch from "../libs/fetch";
 
-const usersQuery = `query users($limit: Int!) {
-  users(limit: $limit, order_by: {created_at: desc}) 
-  { 
-    id 
-    name 
-  }
-}`;
+const usersQuery = {
+  query: `query users($limit: Int!) {
+    users(limit: $limit, order_by: {created_at: desc}) 
+    { 
+      id 
+      name 
+    }
+  }`,
+  variables: { limit: 10 },
+};
 
-const fetcher = async () => await query(usersQuery);
+const fetcher = async () => await fetch(usersQuery);
 
 export default function Main(props) {
   // The useSWR hook gets a graphql query as the key and the fetcher function
@@ -36,8 +39,8 @@ export default function Main(props) {
 }
 
 export async function getStaticProps() {
-  const fetch = await query(usersQuery);
-  const users = fetch.users;
+  const query = await fetch(usersQuery);
+  const users = query.users;
 
   return {
     props: {

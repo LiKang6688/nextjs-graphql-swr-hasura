@@ -9,19 +9,22 @@ const headers = {
   Accept: "application/json",
   "x-hasura-admin-secret": HASURA_ADMIN_SECRET,
 };
+const variables = {
+  limit: 5,
+};
 const graphQLClient = new GraphQLClient(GRAPHQL_ENDPOINT, {
   headers,
 });
 const usersQuery = gql`
-  {
-    users(limit: 10, order_by: { created_at: desc }) {
+  query users($limit: Int!) {
+    users(limit: $limit, order_by: { created_at: desc }) {
       id
       name
     }
   }
 `;
 
-const fetcher = async (query) => await graphQLClient.request(query);
+const fetcher = async (query) => await graphQLClient.request(query, variables);
 
 export default function Main(props) {
   // The useSWR hook gets a graphql query as the key and the fetcher function
@@ -45,7 +48,7 @@ export default function Main(props) {
 }
 
 export async function getStaticProps() {
-  const fetch = await graphQLClient.request(usersQuery);
+  const fetch = await graphQLClient.request(usersQuery, variables);
   const users = fetch.users;
 
   return {
