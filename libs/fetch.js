@@ -2,7 +2,7 @@ const GRAPHQL_ENDPOINT = "https://" + process.env.NEXT_PUBLIC_HASURA_URL;
 const HASURA_ADMIN_SECRET = process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET;
 const headers = {
   "Content-Type": "application/json",
-  Accept: "application/json",
+  "Accept": "application/json",
   "x-hasura-admin-secret": HASURA_ADMIN_SECRET,
 };
 

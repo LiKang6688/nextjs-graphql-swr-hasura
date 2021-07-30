@@ -38,6 +38,8 @@ export default function Main(props) {
   );
 }
 
+// during the build process，
+// get any data needed to be passed into the page component as props
 export async function getStaticProps() {
   const query = await fetch(usersQuery);
   const users = query.users;

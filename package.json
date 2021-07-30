@@ -5,6 +5,7 @@
   "license": "MIT",
   "author": "Praveen <praveen@hasura.io>",
   "dependencies": {
+    "@apollo/client": "^3.3.21",
     "@zeit/next-css": "^1.0.1",
     "graphql": "^15.5.1",
     "graphql-request": "^3.5.0",
