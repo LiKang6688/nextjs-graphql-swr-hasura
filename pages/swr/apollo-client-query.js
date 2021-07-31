@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 import useSWR from "swr";
-import client from "../libs/apollo-client";
+import client from "../../libs/apollo-client";
 
 const variables = {
   limit: 10,

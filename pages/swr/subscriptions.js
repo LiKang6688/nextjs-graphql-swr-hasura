@@ -1,5 +1,5 @@
 import Link from "next/link";
-import subscribe from "../libs/subscribe";
+import subscribe from "../../libs/subscribe";
 
 import useSWR from "swr";
 

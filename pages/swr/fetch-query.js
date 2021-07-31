@@ -1,6 +1,6 @@
 import React from "react";
 import useSWR from "swr";
-import fetch from "../libs/fetch";
+import fetch from "../../libs/fetch";
 
 const usersQuery = {
   query: `query users($limit: Int!) {

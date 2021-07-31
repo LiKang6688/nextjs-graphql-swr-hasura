@@ -1,26 +1,27 @@
 import React, { useState } from "react";
 import useSWR, { mutate, trigger } from "swr";
+// https://swr.vercel.app
 import { v4 as uuidv4 } from "uuid";
-import fetch from "../libs/fetch";
+import { gql } from "graphql-request";
+import graphQLClient from "../../libs/graphqL-client";
 
-const usersQuery = {
-  query: `query users($limit: Int!) { 
-    users(limit: $limit, order_by: {created_at: desc}) 
-    { 
-      id 
-      name 
-    } 
-  }`,
-  variables: { limit: 10 },
+const variables = {
+  limit: 10,
 };
+const usersQuery = gql`
+  query users($limit: Int!) {
+    users(limit: $limit, order_by: { created_at: desc }) {
+      id
+      name
+    }
+  }
+`;
 
-const fetcher = async () => await fetch(usersQuery);
+const fetcher = async (query) => await graphQLClient.request(query, variables);
 
-export default function FetchMutation(props) {
+export default function GraphqlRequestMutation(props) {
   const [text, setText] = useState("");
-  const { data, error } = useSWR(usersQuery, fetcher, {
-    initialData: props,
-  });
+  const { data, error } = useSWR(usersQuery, fetcher, { initialData: props });
 
   if (error) return <div>Error...</div>;
   if (!data) return <div>Loading...</div>;
@@ -31,21 +32,32 @@ export default function FetchMutation(props) {
     // mutate current data to optimistically update the UI
     // in the mutate method,a key can be passed (GraphQL query will be the key for us)
     // and the new data to be used along with a boolean to specify whether you want to revalidate or not.
+    // update the local data immediately, but disable the revalidation
     mutate(usersQuery, { users: [...data.users, { id, name: text }] }, false);
     // send text to the API
-    const usersMutation = {
-      query: `mutation users($id: String!, $name: String!) 
-        { insert_users(objects: [{id: $id, name: $name}]) 
-          { affected_rows } 
-        }`,
-      variables: { id: id, name: text },
+    const usersMutation = gql`
+      mutation users($id: String!, $name: String!) {
+        insert_users(objects: [{ id: $id, name: $name }]) {
+          affected_rows
+        }
+      }
+    `;
+    const variables = {
+      id: id,
+      name: text,
     };
-    await fetch(usersMutation);
+    try {
+      // send a request to the API to update the source
+      await graphQLClient.request(usersMutation, variables);
+    } catch (error) {
+      console.error(JSON.stringify(error, undefined, 2));
+    }
     // trigger a revalidation (refetch) to make sure our local data is correct
     mutate(usersQuery);
     setText("");
   }
 
+  //   Todo: File Upload
   return (
     <div>
       <h1>Insert a new user</h1>
@@ -67,8 +79,8 @@ export default function FetchMutation(props) {
 }
 
 export async function getStaticProps() {
-  const query = await fetch(usersQuery);
-  const users = query.users;
+  const fetch = await graphQLClient.request(usersQuery, variables);
+  const users = fetch.users;
 
   return {
     props: {
