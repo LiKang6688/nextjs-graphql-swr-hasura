@@ -17,7 +17,10 @@ const usersQuery = {
   variables,
 };
 
-const fetcher = async () => await client.query(usersQuery);
+const fetcher = async () => {
+  const result = await client.query(usersQuery);
+  return result.data;
+};
 
 export default function ApolloClientQuery(props) {
   // The useSWR hook gets a graphql query as the key and the fetcher function
@@ -30,7 +33,7 @@ export default function ApolloClientQuery(props) {
     <div style={{ textAlign: "center" }}>
       <h1>Users from database</h1>
       <div>
-        {data.data.users.map((user) => (
+        {data.users.map((user) => (
           <div key={user.id}>
             <p>{user.name}</p>
           </div>
@@ -45,7 +48,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      data: data,
+      users: data.users,
     },
   };
 }

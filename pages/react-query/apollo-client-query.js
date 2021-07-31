@@ -26,7 +26,6 @@ export default function ApolloClientQuery(props) {
   const { isLoading, error, data } = useQuery("users", fetcher, {
     initialData: props,
   });
-  console.log({ data });
 
   if (error) return <div>Error...</div>;
   if (isLoading) return <div>Loading...</div>;

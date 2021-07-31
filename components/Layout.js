@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Link from "next/link";
 import "../styles/style.css";
 
@@ -22,6 +22,9 @@ export default function Layout({ children }) {
               <a>Subscriptions</a>
             </Link>
           </li>
+        </ul>
+
+        <ul>
           <li>
             <Link href="/swr/graphql-request-query">
               <a>Graphql Request Query</a>
@@ -32,10 +35,30 @@ export default function Layout({ children }) {
               <a>Graphql Quest Mutation</a>
             </Link>
           </li>
+        </ul>
 
+        <ul>
           <li>
             <Link href="/swr/apollo-client-query">
               <a>Apollo Client Query</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/swr/apollo-client-muation">
+              <a>Apollo Client Mutations</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/swr/apollo-client-subscription">
+              <a>Apollo Client Subscription</a>
+            </Link>
+          </li>
+        </ul>
+
+        <ul>
+          <li>
+            <Link href="/react-query/apollo-client-query">
+              <a>Apollo Client Query (react query)</a>
             </Link>
           </li>
         </ul>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useSWR, { mutate, trigger } from "swr";
+import useSWR, { mutate } from "swr";
 import { v4 as uuidv4 } from "uuid";
 import fetch from "../../libs/fetch";
 
@@ -47,7 +47,7 @@ export default function FetchMutation(props) {
   }
 
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <h1>Insert a new user</h1>
       <form onSubmit={handleSubmit}>
         <input
