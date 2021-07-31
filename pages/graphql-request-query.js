@@ -1,25 +1,23 @@
-import { gql } from "@apollo/client";
+import React from "react";
 import useSWR from "swr";
-import client from "../libs/apollo-client";
+import { gql } from "graphql-request";
+import graphQLClient from "../libs/graphqL-client";
 
 const variables = {
   limit: 10,
 };
-const usersQuery = {
-  query: gql`
-    query users($limit: Int!) {
-      users(limit: $limit, order_by: { created_at: desc }) {
-        id
-        name
-      }
+const usersQuery = gql`
+  query users($limit: Int!) {
+    users(limit: $limit, order_by: { created_at: desc }) {
+      id
+      name
     }
-  `,
-  variables,
-};
+  }
+`;
 
-const fetcher = async () => await client.query(usersQuery);
+const fetcher = async (query) => await graphQLClient.request(query, variables);
 
-export default function Main(props) {
+export default function GraphqlRequestQuery(props) {
   // The useSWR hook gets a graphql query as the key and the fetcher function
   const { data, error } = useSWR(usersQuery, fetcher, { initialData: props });
 
@@ -30,7 +28,7 @@ export default function Main(props) {
     <div style={{ textAlign: "center" }}>
       <h1>Users from database</h1>
       <div>
-        {data.data.users.map((user) => (
+        {data.users.map((user) => (
           <div key={user.id}>
             <p>{user.name}</p>
           </div>
@@ -41,11 +39,12 @@ export default function Main(props) {
 }
 
 export async function getStaticProps() {
-  const { data } = await client.query(usersQuery);
+  const fetch = await graphQLClient.request(usersQuery, variables);
+  const users = fetch.users;
 
   return {
     props: {
-      data: data,
+      users,
     },
   };
 }

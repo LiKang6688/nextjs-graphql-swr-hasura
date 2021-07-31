@@ -8,8 +8,8 @@ const headers = {
   Accept: "application/json",
   "x-hasura-admin-secret": HASURA_ADMIN_SECRET,
 };
-const graphQLClient = new GraphQLClient(GRAPHQL_ENDPOINT, {
+const client = new GraphQLClient(GRAPHQL_ENDPOINT, {
   headers,
 });
 
-export default graphQLClient;
+export default client;

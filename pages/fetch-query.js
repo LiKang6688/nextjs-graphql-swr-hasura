@@ -1,25 +1,25 @@
 import React from "react";
 import useSWR from "swr";
-import { gql } from "graphql-request";
-import graphQLClient from "../libs/graphQLClient";
+import fetch from "../libs/fetch";
 
-const variables = {
-  limit: 10,
-};
-const usersQuery = gql`
-  query users($limit: Int!) {
-    users(limit: $limit, order_by: { created_at: desc }) {
-      id
-      name
+const usersQuery = {
+  query: `query users($limit: Int!) {
+    users(limit: $limit, order_by: {created_at: desc}) 
+    { 
+      id 
+      name 
     }
-  }
-`;
+  }`,
+  variables: { limit: 10 },
+};
 
-const fetcher = async (query) => await graphQLClient.request(query, variables);
+const fetcher = async () => await fetch(usersQuery);
 
-export default function Main(props) {
+export default function FetchQuery(props) {
   // The useSWR hook gets a graphql query as the key and the fetcher function
-  const { data, error } = useSWR(usersQuery, fetcher, { initialData: props });
+  const { data, error } = useSWR(usersQuery, fetcher, {
+    initialData: props,
+  });
 
   if (error) return <div>Error...</div>;
   if (!data) return <div>Loading...</div>;
@@ -38,9 +38,11 @@ export default function Main(props) {
   );
 }
 
+// during the build process，
+// get any data needed to be passed into the page component as props
 export async function getStaticProps() {
-  const fetch = await graphQLClient.request(usersQuery, variables);
-  const users = fetch.users;
+  const query = await fetch(usersQuery);
+  const users = query.users;
 
   return {
     props: {

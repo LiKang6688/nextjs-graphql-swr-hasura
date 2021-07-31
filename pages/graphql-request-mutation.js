@@ -3,7 +3,7 @@ import useSWR, { mutate, trigger } from "swr";
 // https://swr.vercel.app
 import { v4 as uuidv4 } from "uuid";
 import { gql } from "graphql-request";
-import graphQLClient from "../libs/graphQLClient";
+import graphQLClient from "../libs/graphqL-client";
 
 const variables = {
   limit: 10,
@@ -19,7 +19,7 @@ const usersQuery = gql`
 
 const fetcher = async (query) => await graphQLClient.request(query, variables);
 
-export default function OptimisticUI(props) {
+export default function GraphqlRequestMutation(props) {
   const [text, setText] = useState("");
   const { data, error } = useSWR(usersQuery, fetcher, { initialData: props });
 
@@ -52,8 +52,8 @@ export default function OptimisticUI(props) {
     } catch (error) {
       console.error(JSON.stringify(error, undefined, 2));
     }
-    // tell all SWRs with this key to revalidate
-    trigger(usersMutation);
+    // trigger a revalidation (refetch) to make sure our local data is correct
+    mutate(usersQuery);
     setText("");
   }
 

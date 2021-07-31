@@ -16,7 +16,7 @@ const usersQuery = {
 
 const fetcher = async () => await fetch(usersQuery);
 
-export default function OptimisticUI(props) {
+export default function FetchMutation(props) {
   const [text, setText] = useState("");
   const { data, error } = useSWR(usersQuery, fetcher, {
     initialData: props,
@@ -41,8 +41,8 @@ export default function OptimisticUI(props) {
       variables: { id: id, name: text },
     };
     await fetch(usersMutation);
-    // revalidate
-    trigger(usersMutation);
+    // trigger a revalidation (refetch) to make sure our local data is correct
+    mutate(usersQuery);
     setText("");
   }
 

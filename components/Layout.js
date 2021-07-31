@@ -10,13 +10,13 @@ class Layout extends Component {
         <header>
           <ul>
             <li>
-              <Link href="/">
-                <a>Queries</a>
+              <Link href="/fetch-query">
+                <a>Fetch Query</a>
               </Link>
             </li>
             <li>
-              <Link href="/optimistic-ui">
-                <a>Optimistic UI</a>
+              <Link href="/fetch-mutation">
+                <a>Fetch Mutation</a>
               </Link>
             </li>
             <li>
@@ -25,19 +25,19 @@ class Layout extends Component {
               </Link>
             </li>
             <li>
-              <Link href="/graphql-request">
-                <a>Graphql Request</a>
+              <Link href="/graphql-request-query">
+                <a>Graphql Request Query</a>
               </Link>
             </li>
             <li>
-              <Link href="/graphql-mutation">
-                <a>Graphql Mutation</a>
+              <Link href="/graphql-request-mutation">
+                <a>Graphql Quest Mutation</a>
               </Link>
             </li>
 
             <li>
-              <Link href="/apollo-fetch">
-                <a>Apollo Fetch</a>
+              <Link href="/apollo-client-query">
+                <a>Apollo Client Query</a>
               </Link>
             </li>
           </ul>
