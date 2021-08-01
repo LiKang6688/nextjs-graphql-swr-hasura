@@ -4,8 +4,8 @@ import fetch from "../../libs/fetch";
 
 const usersQuery = {
   query: `query users($limit: Int!) {
-    users(limit: $limit, order_by: {created_at: desc}) 
-    { 
+    users(limit: $limit, order_by: {created_at: desc})
+    {
       id
       name
     }
