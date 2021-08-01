@@ -8,7 +8,7 @@ const client = new ApolloClient({
     "x-hasura-admin-secret": HASURA_ADMIN_SECRET,
   },
   // Apollo Client uses to cache query results after fetching them.
-  cache: new InMemoryCache(),
+  // cache: new InMemoryCache(),
 });
 
 export default client;
