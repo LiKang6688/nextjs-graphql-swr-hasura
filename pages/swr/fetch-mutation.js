@@ -7,7 +7,7 @@ const usersQuery = {
   query: `query users($limit: Int!) { 
     users(limit: $limit, order_by: {created_at: desc}) 
     { 
-      id 
+      id
       name 
     } 
   }`,

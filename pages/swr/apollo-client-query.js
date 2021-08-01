@@ -18,8 +18,8 @@ const usersQuery = {
 };
 
 const fetcher = async () => {
-  const result = await client.query(usersQuery);
-  return result.data;
+  const { data } = await client.query(usersQuery);
+  return data;
 };
 
 export default function ApolloClientQuery(props) {

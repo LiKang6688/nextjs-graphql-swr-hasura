@@ -48,11 +48,11 @@ export default function Layout({ children }) {
               <a>Apollo Client Mutations</a>
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link href="/swr/apollo-client-subscription">
               <a>Apollo Client Subscription</a>
             </Link>
-          </li>
+          </li> */}
         </ul>
 
         <ul>
