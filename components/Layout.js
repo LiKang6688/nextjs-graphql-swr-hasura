@@ -18,8 +18,8 @@ export default function Layout({ children }) {
             </Link>
           </li>
           <li>
-            <Link href="/swr/subscriptions">
-              <a>Subscriptions</a>
+            <Link href="/swr/fetch-subscription">
+              <a>Fetch Subscription</a>
             </Link>
           </li>
         </ul>

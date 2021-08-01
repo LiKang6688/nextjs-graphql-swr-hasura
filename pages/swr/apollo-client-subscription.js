@@ -1,20 +1,47 @@
-import subscribe from "../../libs/subscribe";
+import { gql, useSubscription } from "@apollo/client";
 import useSWR from "swr";
+import client from "../../libs/apollo-client";
 
-const USER_SUBSCRIPTION = `
-  subscription {
-    users(order_by: {created_at: desc}, limit: 10) {
+const variables = {
+  variables: {
+    limit: 10,
+  },
+};
+const USER_SUBSCRIPTION = gql`
+  subscription users($limit: Int!) {
+    users(order_by: { created_at: desc }, limit: $limit) {
       id
       name
       created_at
     }
   }
 `;
-
-const subscriber = async (...args) => subscribe(USER_SUBSCRIPTION);
+const usersQuery = {
+  query: gql`
+    query users($limit: Int!) {
+      users(limit: $limit, order_by: { created_at: desc }) {
+        id
+        name
+      }
+    }
+  `,
+  variables: {
+    limit: 10,
+  },
+};
 
 export default function Subscription(props) {
-  const { data, error } = useSWR("subscription", subscriber);
+  const subscriber = () => {
+    const { data, error, loading } = useSubscription(
+      USER_SUBSCRIPTION,
+      variables
+    );
+    return data;
+  };
+
+  const { data, error } = useSWR("subscription", subscriber, {
+    initialData: props,
+  });
 
   if (error) return <div>Error...</div>;
   if (!data) return <div>Loading...</div>;
@@ -31,4 +58,14 @@ export default function Subscription(props) {
       </div>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const { data } = await client.query(usersQuery);
+
+  return {
+    props: {
+      users: data.users,
+    },
+  };
 }
