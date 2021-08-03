@@ -27,7 +27,10 @@ const fetcher = async () => {
 
 export default function GraphqlRequestMutation(props) {
   const [text, setText] = useState("");
-  const { data, error } = useSWR(usersQuery, fetcher, { initialData: props });
+  const { data, error } = useSWR(usersQuery, fetcher, {
+    initialData: props,
+    refreshInterval: 1000,
+  });
 
   if (error) return <div>Error...</div>;
   if (!data) return <div>Loading...</div>;

@@ -24,7 +24,10 @@ const fetcher = async () => {
 
 export default function ApolloClientQuery(props) {
   // The useSWR hook gets a graphql query as the key and the fetcher function
-  const { data, error } = useSWR(usersQuery, fetcher, { initialData: props });
+  const { data, error } = useSWR(usersQuery, fetcher, {
+    initialData: props,
+    refreshInterval: 1000,
+  });
 
   if (error) return <div>Error...</div>;
   if (!data) return <div>Loading...</div>;
