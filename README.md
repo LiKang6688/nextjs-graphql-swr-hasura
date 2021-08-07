@@ -1,14 +1,29 @@
-# swr-graphql
+# nextjs-graphql-swr-hasura
 
-## The Idea behind the Example
+## The Idea
 
-This is a sample app demonstrating usage of `useSWR`, `mutate` and `trigger` of `SWR` library with a Hasura GraphQL API. The app uses native websockets for implementing GraphQL subscriptions on the client.
+This is a demo app demonstrating usage of `SWR` or `React Query` library with a Hasura GraphQL API. The app uses native websockets or Subscriptions Transport Ws for implementing GraphQL subscriptions on the client.
 
 - Hasura GraphQL APIs for instant GraphQL backend.
-- Integrate simple GraphQL queries.
-- Optimistic UI with GraphQL mutations.
-- GraphQL Subscriptions using native websockets.
+- Integrate GraphQL queries.
+- Integrate GraphQL mutations.
+- GraphQL Subscriptions using native websockets or Subscriptions Transport Ws.
 
+Fetch + GraphQL + SWR + WebSocket
+
+GraphQL Request + GraphQL + SWR
+
+Apollo Client + GraphQL + SWR + Subscriptions Transport Ws
+
+Apollo Client + GraphQL + React Query
+
+## .env.local
+
+NEXT_PUBLIC_HASURA_ADMIN_SECRET=
+
+NEXT_PUBLIC_HASURA_URL=
+
+SECRET=
 
 ## How to Use
 
@@ -20,10 +35,4 @@ yarn dev
 # or
 npm install
 npm run dev
-```
-
-Deploy it to the cloud with [now](https://zeit.co/home) ([download](https://zeit.co/download))
-
-```
-now
 ```
